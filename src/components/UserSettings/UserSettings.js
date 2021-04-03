@@ -2,12 +2,7 @@ import React from 'react';
 import "./UserSettings.scss";
 
 export const UserSettings = (props) => {
-    const { username, history } = props;
-
-    const deleteToken = () => {
-        sessionStorage.clear("authToken");
-        history.push("/login");
-    }
+    const { username, redirectToLogin } = props;
 
     const createChannel = () => {}
 
@@ -24,7 +19,7 @@ export const UserSettings = (props) => {
                     <p onClick={joinChannel}>Join Channel</p>
                 </li>
                 <li className="user-settings__settings-item">
-                    <p onClick={deleteToken}>Logout</p>
+                    <p onClick={redirectToLogin}>Logout</p>
                 </li>
             </ul>
         </div>
