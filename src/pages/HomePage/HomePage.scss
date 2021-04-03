@@ -1,0 +1,17 @@
+@use "../../partials/color-scheme.scss" as *;
+
+.home-page {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: $primary-black;
+    color: $white;
+    min-width: fit-content;
+    width: 24vw;
+    padding: 0.5rem;
+}

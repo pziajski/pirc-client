@@ -1,0 +1,20 @@
+@use "../../partials/color-scheme.scss" as *;
+
+.user-settings {
+    margin-bottom: 1rem;
+    
+    &__settings-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    &__settings-item {
+        padding: 0.25rem 0.5rem;
+        &:hover {
+            cursor:pointer;
+            background: $purple-lighter;
+        }
+    }
+}

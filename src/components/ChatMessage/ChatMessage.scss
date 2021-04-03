@@ -1,0 +1,27 @@
+@use "../../partials/mixins.scss" as *;
+@use "../../partials/color-scheme.scss" as *;
+
+.chat-message {
+    border-radius: 5px;
+    padding: 1rem;
+
+    &__header {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        // justify-content: ;
+    }
+
+    &__username {
+        &--hide {
+            display: none;
+        }
+    }
+
+    &__timestamp {
+        font-size: 0.75rem;
+    }
+
+    &__message {}
+}
