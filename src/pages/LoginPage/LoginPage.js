@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import Cookies from "universal-cookie";
 import "./LoginPage.scss";
 import { Redirect } from 'react-router';
@@ -9,10 +8,9 @@ import { authPostRequest } from "../../functions/AuthorizedAPIRequests";
 export const LoginPage = (props) => {
     const cookies = new Cookies();
 
-    // if (!!cookies.get("authToken")) {
-    //     console.log("HAS TOKEN.................................")
-    //     return <Redirect to="/channels" />
-    // }
+    if (!!cookies.get("authToken")) {
+        return <Redirect to="/channels" />
+    }
 
     const loginUser = (e) => {
         const username = e.target.username.value;
@@ -20,11 +18,7 @@ export const LoginPage = (props) => {
 
         authPostRequest(`login`, { username, password })
             .then(response => {
-                console.log(response)
-                // cookies.set("authToken", response.data.token, { path: "/" });
-
-                // sessionStorage.authToken = response.data.token;
-                // props.history.push("/channels");
+                props.history.push("/channels");
             })
             .catch(error => {
                 console.error("failed to login", error);
@@ -37,7 +31,6 @@ export const LoginPage = (props) => {
 
         authPostRequest(`signup`, { username, password })
             .then(response => {
-                // sessionStorage.authToken = response.data.token;
                 props.history.push("/channels");
             })
             .catch(error => {
