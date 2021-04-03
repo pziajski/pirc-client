@@ -35,15 +35,9 @@ export const LoginPage = (props) => {
         const username = e.target.username.value;
         const password = e.target.password.value;
 
-        axios
-            .post(`${process.env.REACT_APP_API}/signup`, {
-                username,
-                password
-            }, {
-                withCredentials: true
-            })
+        authPostRequest(`signup`, { username, password })
             .then(response => {
-                sessionStorage.authToken = response.data.token;
+                // sessionStorage.authToken = response.data.token;
                 props.history.push("/channels");
             })
             .catch(error => {
