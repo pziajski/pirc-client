@@ -10,7 +10,7 @@ export const UserSettings = (props) => {
 
     return (
         <div className="user-settings">
-            <p>{`// ${username}`}</p>
+            <p className="user-settings__user">{`// ${username}`}</p>
             <ul className="user-settings__settings-list">
                 <li className="user-settings__settings-item">
                     <p onClick={createChannel}>Create Channel</p>
