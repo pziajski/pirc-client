@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { Chat } from "../../components/Chat/Chat";
 import { Channels } from "../../components/Channels/Channels";
@@ -14,9 +14,9 @@ export const HomePage = (props) => {
     useEffect(() => {
         let isMounted = true;
         authGetRequest(`users/userInfo`)
-            .then(response => {
+            .then(userInfo => {
                 if (isMounted) {
-                    setUserInfo(response.data);
+                    setUserInfo(userInfo);
                 }
             })
             .catch(error => {
@@ -33,9 +33,9 @@ export const HomePage = (props) => {
         let isMounted = true;
         if (!!userInfo) {
             authGetRequest(`users/channels`)
-                .then(response => {
+                .then(channelsJoined => {
                     if (isMounted) {
-                        setUserChannelsJoined(response.data);
+                        setUserChannelsJoined(channelsJoined);
                         props.history.push(`/channels/${lastChannel}`);
                     }
                 })

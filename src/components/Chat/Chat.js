@@ -15,9 +15,9 @@ export const Chat = (props) => {
     useEffect(() => {
         let isMounted = true;
         authGetRequest(`channels/${viewChannel}`)
-            .then(response => {
+            .then(details => {
                 if (isMounted) {
-                    setChannelDetails(response.data);
+                    setChannelDetails(details);
                 }
             })
             .catch(error => {
@@ -33,9 +33,9 @@ export const Chat = (props) => {
     // get channel messages
     const getChannelMessages = (isMounted) => {
         authGetRequest(`chats/${channelId}`)
-            .then(response => {
+            .then(messages => {
                 if (isMounted) {
-                    setChannelMessages(response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+                    setChannelMessages(messages.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
                 }
             })
             .catch(error => {
@@ -67,8 +67,8 @@ export const Chat = (props) => {
         setUserInput("");
 
         authPostRequest(`chats/${channelId}`, data)
-            .then(response => {
-                setChannelMessages([response.data, ...channelMessages]);
+            .then(comment => {
+                setChannelMessages([comment, ...channelMessages]);
             })
             .catch(error => {
                 console.error("...ERROR... failed to send message sendMessage ->", error);
