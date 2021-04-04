@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { Chat } from "../../components/Chat/Chat";
 import { Channels } from "../../components/Channels/Channels";
@@ -9,6 +9,7 @@ import "./HomePage.scss";
 
 export const HomePage = (props) => {
     const cookies = new Cookies();
+    const lastChannel  = !sessionStorage.getItem("lastChannel") ? 1 : sessionStorage.getItem("lastChannel");
     const [userInfo, setUserInfo] = useState({});
     useEffect(() => {
         let isMounted = true;
@@ -35,7 +36,7 @@ export const HomePage = (props) => {
                 .then(response => {
                     if (isMounted) {
                         setUserChannelsJoined(response.data);
-                        props.history.push("/channels/1");
+                        props.history.push(`/channels/${lastChannel}`);
                     }
                 })
                 .catch(error => {
@@ -48,10 +49,6 @@ export const HomePage = (props) => {
         }
 
     }, [userInfo]);
-
-    const changeChannels = (channelId) => {
-        props.history.push(`/channels/${channelId}`);
-    }
 
     const redirectToLogin = () => {
         cookies.remove("authToken", { path: "/" });
@@ -66,8 +63,7 @@ export const HomePage = (props) => {
         <section className="home-page">
             <aside className="sidebar">
                 <Channels
-                    userChannelsJoined={userChannelsJoined}
-                    changeChannels={changeChannels} />
+                    userChannelsJoined={userChannelsJoined} />
                 <UserSettings
                     username={userInfo.username}
                     redirectToLogin={redirectToLogin} />
