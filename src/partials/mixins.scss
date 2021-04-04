@@ -1,0 +1,62 @@
+@use "./color-scheme.scss" as *;
+@use "./typography.scss";
+
+@mixin input-styling {
+    background-color: $white-darker;
+    border: none;
+    outline: none;
+    text-align: left;
+    vertical-align: middle;
+
+    &:focus {
+        outline: 2px solid $green-lighter;
+    }
+}
+
+@mixin button-styling {
+    text-align: center;
+    vertical-align: middle;
+    border: none;
+    background-color: $green;
+    color: $white;
+
+    &:hover {
+        cursor: pointer;
+        background-color: $green-lighter;
+    }
+}
+
+@mixin message-styling {
+    background-color: $white-darker;
+    box-shadow: 8px 8px $primary-black;
+    color: $primary-black;
+    margin: 1rem 0;
+    width: 60%;
+}
+
+// fonts
+@mixin header-1 {
+    font-family: "RobotoMedium";
+    font-size: 2.5rem;
+}
+
+@mixin header-2 {
+    font-family: "RobotoRegular";
+    font-size: 1.25rem;
+}
+
+@mixin body-1 {
+    font-family: "RobotoRegular";
+    font-size: 1rem;
+}
+
+@mixin body-2 {
+    font-family: "RobotoBold";
+    font-size: 1rem;
+}
+
+@mixin label-1 {
+    font-family: "RobotoMedium";
+    font-size: 0.75rem;
+    font-style: italic;
+}
