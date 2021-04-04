@@ -7,10 +7,9 @@ export const Chat = (props) => {
     const { userInfo } = props;
     const channelId = props.match.params.channelId;
 
-    const [viewChannel, setViewChannel] = useState(props.match.params.channelId ? props.match.params.channelId : 1);
-    useEffect(() => {
-        setViewChannel(props.match.params.channelId);
-    }, [props.match.params.channelId])
+    const [userInput, setUserInput] = useState("");
+
+    const viewChannel = props.match.params.channelId;
 
     const [channelDetails, setChannelDetails] = useState([]);
     useEffect(() => {
@@ -30,20 +29,20 @@ export const Chat = (props) => {
         }
     }, [viewChannel]);
 
-    
+
     // get channel messages
     const getChannelMessages = (isMounted) => {
         authGetRequest(`chats/${channelId}`)
-        .then(response => {
-            if (isMounted) {
-                setChannelMessages(response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
-            }
-        })
-        .catch(error => {
-            console.error(error);
-        })
+            .then(response => {
+                if (isMounted) {
+                    setChannelMessages(response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
     }
-    
+
     const [channelMessages, setChannelMessages] = useState([]);
     useEffect(() => {
         let isMounted = true;
@@ -65,7 +64,7 @@ export const Chat = (props) => {
             message: e.target.message.value
         };
 
-        e.target.reset();
+        setUserInput("");
 
         authPostRequest(`chats/${channelId}`, data)
             .then(response => {
@@ -75,6 +74,17 @@ export const Chat = (props) => {
                 console.error("...ERROR... failed to send message sendMessage ->", error);
             })
     };
+
+    const updateInputState = (e) => {
+        const { target: text } = e;
+        setUserInput(text.value);
+        text.style.height = "48px";
+        text.style.height = !text.scrollHeight
+            ? "48px"
+            : text.scrollHeight > 200
+                ? "150px"
+                : `${text.scrollHeight}px`;
+    }
 
     if (!channelMessages) {
         return <>Loading...</>
@@ -97,10 +107,8 @@ export const Chat = (props) => {
                 }
             </ul>
             <form className="chat__send-form" onSubmit={sendMessage}>
-                <label className="chat__send-label">
-                    <textarea className="chat__send-input" name="message"></textarea>
-                </label>
-                <button className="chat__send-button">Send</button>
+                <textarea className="chat__send-input" name="message" placeholder="Enter your message here..." value={userInput} onChange={e => updateInputState(e)}></textarea>
+                <button className="chat__send-button" disabled={userInput === "" ? true : false}>Send</button>
             </form>
         </div>
     )
