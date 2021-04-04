@@ -31,7 +31,7 @@ export const HomePage = (props) => {
     useEffect(() => {
         let isMounted = true;
         if (!!userInfo) {
-            authGetRequest(`users/${userInfo.id}/channels`)
+            authGetRequest(`users/channels`)
                 .then(response => {
                     if (isMounted) {
                         setUserChannelsJoined(response.data);
