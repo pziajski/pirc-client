@@ -1,8 +1,13 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import "./Channels.scss";
 
 export const Channels = (props) => {
-    const { userChannelsJoined, changeChannels } = props;
+    const { userChannelsJoined } = props;
+
+    const addToSession = (channelID) => {
+        sessionStorage.setItem("lastChannel", channelID);
+    }
 
     return (
         <div className="channels">
@@ -11,7 +16,7 @@ export const Channels = (props) => {
                 {
                     userChannelsJoined.map(channel => 
                         <li className="channels__list-item" key={channel.id}>
-                            <p className="channels__channel" onClick={() => changeChannels(channel.channel_id)}>{`< ${channel.channel.name} />`}</p>
+                            <NavLink to={`/channels/${channel.channel_id}`} className="channels__channel" onClick={() => addToSession(channel.channel_id)}>{`< ${channel.channel.name} />`}</NavLink>
                         </li>
                     )
                 }
