@@ -7,7 +7,7 @@ export const ChatMessage = (props) => {
     return (
         <div className="chat-message">
             <div className="chat-message__header">
-                <h3 className={message.user_id === userInfo.id ? "chat-message__username--hide" : "chat-message__username"}>{message.user.username}</h3>
+                <h3 className={message.username === userInfo.username ? "chat-message__username--hide" : "chat-message__username"}>{message.username}</h3>
                 <p className="chat-message__timestamp">{convertDateToRelative(new Date(message.created_at))}</p>
             </div>
             <p className="chat-message__message">{message.message}</p>

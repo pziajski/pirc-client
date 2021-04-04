@@ -60,7 +60,6 @@ export const Chat = (props) => {
 
     const sendMessage = (e) => {
         e.preventDefault();
-
         const data = {
             user_id: userInfo.id,
             message: e.target.message.value
@@ -70,13 +69,7 @@ export const Chat = (props) => {
 
         authPostRequest(`chats/${channelId}`, data)
             .then(response => {
-                const newMessage = {
-                    ...response.data,
-                    user: {
-                        ...userInfo
-                    }
-                };
-                setChannelMessages([newMessage, ...channelMessages]);
+                setChannelMessages([response.data, ...channelMessages]);
             })
             .catch(error => {
                 console.error("...ERROR... failed to send message sendMessage ->", error);
@@ -95,7 +88,7 @@ export const Chat = (props) => {
             <ul className="chat__message-list">
                 {
                     channelMessages.map(message =>
-                        <li key={message.id} className={message.user_id === userInfo.id ? "chat__message-list-item--personal" : "chat__message-list-item"}>
+                        <li key={message.created_at} className={message.username === userInfo.username ? "chat__message-list-item--personal" : "chat__message-list-item"}>
                             <ChatMessage
                                 userInfo={userInfo}
                                 message={message} />
