@@ -23,7 +23,6 @@ export const LoginPage = (props) => {
 
         authPostRequest(`login`, { username, password })
             .then(response => {
-                console.log(response.token)
                 cookies.set("authToken", response.token, cookieConfig)
                 props.history.push("/channels");
             })
