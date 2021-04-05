@@ -2,11 +2,7 @@ import React from 'react';
 import "./UserSettings.scss";
 
 export const UserSettings = (props) => {
-    const { username, redirectToLogin } = props;
-
-    const createChannel = () => {}
-
-    const joinChannel = () => {}
+    const { username, redirectToLogin, createChannel, joinChannel } = props;
 
     return (
         <div className="user-settings">
