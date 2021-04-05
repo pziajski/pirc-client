@@ -8,6 +8,11 @@ import iconImage from "../../assets/images/Source-Code-256.png";
 
 export const LoginPage = (props) => {
     const cookies = new Cookies();
+    const cookieConfig = {
+        maxAge: 604800000,
+        sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+        secure: process.env.NODE_ENV === "production"
+    };
     const [action, setAction] = useState("login");
     const [error, setError] = useState("");
 
@@ -18,6 +23,7 @@ export const LoginPage = (props) => {
 
         authPostRequest(`login`, { username, password })
             .then(response => {
+                cookies.set("authToken", response.token, cookieConfig)
                 props.history.push("/channels");
             })
             .catch(error => {
@@ -44,6 +50,7 @@ export const LoginPage = (props) => {
 
         authPostRequest(`signup`, { username, password })
             .then(response => {
+                cookies.set("authToken", response.token, cookieConfig)
                 props.history.push("/channels");
             })
             .catch(error => {
@@ -58,7 +65,7 @@ export const LoginPage = (props) => {
             : setAction("login");
         setError("");
     }
-    
+
     if (!!cookies.get("authToken")) {
         return <Redirect to="/channels" />
     }
