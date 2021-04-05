@@ -37,6 +37,11 @@ export const LoginPage = (props) => {
             return;
         }
 
+        if (password.length < 3 || password.length > 16) {
+            setError("pasword must be between 3 and 16 characters.");
+            return;
+        }
+
         authPostRequest(`signup`, { username, password })
             .then(response => {
                 props.history.push("/channels");
