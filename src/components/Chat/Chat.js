@@ -103,7 +103,7 @@ export const Chat = (props) => {
                 }
             </ul>
             <form className="chat__send-form" onSubmit={sendMessage}>
-                <textarea className="chat__send-input" name="message" maxLength="250" placeholder="Enter your message here..." value={userInput} onChange={e => updateInputState(e)}></textarea>
+                <textarea className="chat__send-input" name="message" maxLength="1000" placeholder="Enter your message here..." value={userInput} onChange={e => updateInputState(e)}></textarea>
                 <button className="chat__send-button" disabled={userInput === "" ? true : false}>Send</button>
             </form>
         </div>
