@@ -9,6 +9,7 @@ import iconImage from "../../assets/images/Source-Code-256.png";
 export const LoginPage = (props) => {
     const cookies = new Cookies();
     const cookieConfig = {
+        path: "/",
         maxAge: 604800000,
         sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
         secure: process.env.NODE_ENV === "production"
