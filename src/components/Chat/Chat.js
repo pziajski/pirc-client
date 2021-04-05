@@ -78,12 +78,6 @@ export const Chat = (props) => {
     const updateInputState = (e) => {
         const { target: text } = e;
         setUserInput(text.value);
-        text.style.height = "48px";
-        text.style.height = !text.scrollHeight
-            ? "48px"
-            : text.scrollHeight > 200
-                ? "150px"
-                : `${text.scrollHeight}px`;
     }
 
     if (!channelMessages) {
@@ -107,7 +101,7 @@ export const Chat = (props) => {
                 }
             </ul>
             <form className="chat__send-form" onSubmit={sendMessage}>
-                <textarea className="chat__send-input" name="message" placeholder="Enter your message here..." value={userInput} onChange={e => updateInputState(e)}></textarea>
+                <textarea className="chat__send-input" name="message" maxLength="250" placeholder="Enter your message here..." value={userInput} onChange={e => updateInputState(e)}></textarea>
                 <button className="chat__send-button" disabled={userInput === "" ? true : false}>Send</button>
             </form>
         </div>
