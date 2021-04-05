@@ -1,10 +1,11 @@
 @use "../../partials/color-scheme.scss" as *;
+@use "../../partials/mixins.scss" as *;
 
 .channels {
     flex-grow: 1;
 
     &__title {
-        font-size: 2rem;
+        @include header-1;
         margin: 1rem 0;
     }
 
@@ -13,13 +14,17 @@
         flex-direction: column;
     }
 
-    &__list-item {}
-    
-    &__channel {
+    &__list-item {
+        @include body-1;
         padding: 0.25rem 0.5rem;
+        width: 100%;
+
         &:hover {
-            cursor:pointer;
-            background: $purple-lighter;
+            background: $green;
         }
     }
+}
+
+.active {
+    color: $green-lighter;
 }

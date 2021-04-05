@@ -1,6 +1,7 @@
 @use "../../partials/color-scheme.scss" as *;
 
 .home-page {
+    position: relative;
     display: flex;
     height: 100vh;
 }
@@ -12,6 +13,6 @@
     background-color: $primary-black;
     color: $white;
     min-width: fit-content;
-    width: 24vw;
+    width: 20rem;
     padding: 0.5rem;
 }

@@ -1,40 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Switch, Route } from "react-router-dom";
+import Cookies from "universal-cookie";
 import { Chat } from "../../components/Chat/Chat";
 import { Channels } from "../../components/Channels/Channels";
 import { UserSettings } from "../../components/UserSettings/UserSettings";
 import { authGetRequest, authPostRequest } from "../../functions/AuthorizedAPIRequests";
+import { CreateChannel } from "../../components/CreateChannel/CreateChannel";
+import { JoinChannel } from "../../components/JoinChannel/JoinChannel";
 import "./HomePage.scss";
 
 export const HomePage = (props) => {
+    const cookies = new Cookies();
+
+    const pushToHistory = useCallback((url) => {
+        props.history.push(url);
+    }, [props.history])
+
+    const [lastChannel, setLastChannel] = useState(!sessionStorage.getItem("lastChannel") ? 1 : parseInt(sessionStorage.getItem("lastChannel")));
     const [userInfo, setUserInfo] = useState({});
     useEffect(() => {
         let isMounted = true;
         authGetRequest(`users/userInfo`)
-            .then(response => {
-                console.log("GET USERS INFO ->>", response)
+            .then(userInfo => {
                 if (isMounted) {
-                    setUserInfo(response.data);
+                    setUserInfo(userInfo);
                 }
             })
             .catch(error => {
-                props.history.push("/login");
+                pushToHistory("/login");
             })
 
         return () => {
             isMounted = false;
         }
-    }, []);
+    }, [pushToHistory]);
 
     const [userChannelsJoined, setUserChannelsJoined] = useState([]);
     useEffect(() => {
         let isMounted = true;
         if (!!userInfo) {
-            authGetRequest(`users/${userInfo.id}/channels`)
-                .then(response => {
+            authGetRequest(`users/channels`)
+                .then(channelsJoined => {
                     if (isMounted) {
-                        setUserChannelsJoined(response.data);
+                        setUserChannelsJoined(channelsJoined);
+                        !!channelsJoined.find(channel => channel.channel_id === lastChannel)
+                            ? pushToHistory(`/channels/${lastChannel}`)
+                            : setLastChannel(1);
                     }
+                })
+                .catch(error => {
+                    console.error(error);
                 })
         }
 
@@ -42,87 +57,38 @@ export const HomePage = (props) => {
             isMounted = false;
         }
 
-    }, [userInfo]);
+    }, [userInfo, lastChannel, pushToHistory]);
 
-    const [viewChannel, setViewChannel] = useState(1);
-    useEffect(() => {
-        props.history.push(`/channels/${viewChannel}`);
-    }, [viewChannel]);
-
-    const [channelDetails, setChannelDetails] = useState([]);
-    useEffect(() => {
-        let isMounted = true;
-        authGetRequest(`channels/${viewChannel}`)
-            .then(response => {
-                if (isMounted) {
-                    setChannelDetails(response.data);
-                }
-            })
-
-        return () => {
-            isMounted = false;
-        }
-    }, [viewChannel]);
-
-    // get channel messages
-    const getChannelMessages = (isMounted) => {
-        authGetRequest(`chats/${viewChannel}`)
-            .then(response => {
-                if (isMounted) {
-                    setChannelMessages(response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
-                }
-            })
+    const redirectToLogin = () => {
+        cookies.remove("authToken", { path: "/" });
+        props.history.push("/login");
     }
 
-    const [channelMessages, setChannelMessages] = useState([]);
-    useEffect(() => {
-        let isMounted = true;
-        getChannelMessages(isMounted);
-
-        return () => {
-            isMounted = false;
-        }
-    }, [viewChannel]);
-
-    // get messages at an interval
-    useEffect(() => {
-        let isMounted = true;
-        const getMessagesOnInterval = setInterval(() => {
-            getChannelMessages(isMounted);
-        }, 1000);
-        return () => {
-            isMounted = false;
-            clearInterval(getMessagesOnInterval);
-        }
-    }, [])
-
-    const sendMessage = (messageData) => {
-        const { channelId, user_id, message } = messageData;
-        const data = {
-            user_id,
-            message
-        };
-
-        authPostRequest(`chats/${channelId}`, data)
-            .then(response => {
-                const newMessage = {
-                    ...response.data,
-                    user: {
-                        ...userInfo
-                    }
-                };
-                setChannelMessages([newMessage, ...channelMessages]);
+    const [createAction, setCreateAction] = useState(false);
+    const createChannel = (name) => {
+        authPostRequest("channels", { name })
+            .then(newChannel => {
+                const { id } = newChannel;
+                setLastChannel(id);
+                sessionStorage.setItem("lastChannel", id);
             })
             .catch(error => {
-                console.error("...ERROR... failed to send message sendMessage ->", error);
+                console.error(error);
             })
     }
 
-    const changeChannels = (channelId) => {
-        setViewChannel(channelId);
+    const [joinAction, setJoinAction] = useState(false);
+    const joinChannel = (channelId) => {
+        authPostRequest(`channels/${channelId}/users`, { user_id: userInfo.id })
+            .then(joinedChannel => {
+                setLastChannel(joinedChannel.channel_id);
+            })
+            .catch(error => {
+                console.error(error);
+            })
     }
 
-    if (!userChannelsJoined && !channelMessages && !channelDetails) {
+    if (!userChannelsJoined && !userInfo) {
         return <>loading...</>
     }
 
@@ -130,22 +96,35 @@ export const HomePage = (props) => {
         <section className="home-page">
             <aside className="sidebar">
                 <Channels
-                    userChannelsJoined={userChannelsJoined}
-                    changeChannels={changeChannels} />
+                    userChannelsJoined={userChannelsJoined} />
                 <UserSettings
                     username={userInfo.username}
-                    history={props.history} />
+                    redirectToLogin={redirectToLogin}
+                    createChannel={() => setCreateAction(true)}
+                    joinChannel={() => setJoinAction(true)}/>
             </aside>
             <Switch>
                 <Route path="/channels/:channelId" render={renderProps =>
                     <Chat
                         {...renderProps}
-                        userInfo={userInfo}
-                        channelMessages={channelMessages}
-                        sendMessage={sendMessage}
-                        channelDetails={channelDetails} />
+                        userInfo={userInfo} />
                 } />
             </Switch>
+            {
+                createAction
+                    ? <CreateChannel
+                        goBack={() => setCreateAction(false)}
+                        createChannel={createChannel} />
+                    : <></>
+            }
+            {
+                joinAction
+                    ? <JoinChannel
+                        goBack={() => setJoinAction(false)}
+                        joinChannel={joinChannel}
+                        userChannelsJoined={userChannelsJoined} />
+                    : <></>
+            }
         </section>
     )
 }

@@ -2,7 +2,6 @@
 @use "../../partials/color-scheme.scss" as *;
 
 .chat-message {
-    border-radius: 5px;
     padding: 1rem;
 
     &__header {
@@ -10,18 +9,21 @@
         align-items: baseline;
         gap: 1rem;
         margin-bottom: 1rem;
-        // justify-content: ;
     }
 
     &__username {
+        @include body-2;
         &--hide {
             display: none;
         }
     }
 
     &__timestamp {
-        font-size: 0.75rem;
+        @include label-1;
     }
 
-    &__message {}
+    &__message {
+        @include body-1;
+        word-wrap: break-word;
+    }
 }

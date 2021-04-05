@@ -2,20 +2,11 @@ import React from 'react';
 import "./UserSettings.scss";
 
 export const UserSettings = (props) => {
-    const { username, history } = props;
-
-    const deleteToken = () => {
-        sessionStorage.clear("authToken");
-        history.push("/login");
-    }
-
-    const createChannel = () => {}
-
-    const joinChannel = () => {}
+    const { username, redirectToLogin, createChannel, joinChannel } = props;
 
     return (
         <div className="user-settings">
-            <p>// {username}</p>
+            <p className="user-settings__user">{`// ${username}`}</p>
             <ul className="user-settings__settings-list">
                 <li className="user-settings__settings-item">
                     <p onClick={createChannel}>Create Channel</p>
@@ -24,7 +15,7 @@ export const UserSettings = (props) => {
                     <p onClick={joinChannel}>Join Channel</p>
                 </li>
                 <li className="user-settings__settings-item">
-                    <p onClick={deleteToken}>Logout</p>
+                    <p onClick={redirectToLogin}>Logout</p>
                 </li>
             </ul>
         </div>

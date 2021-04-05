@@ -1,7 +1,14 @@
 @use "../../partials/color-scheme.scss" as *;
+@use "../../partials/mixins.scss" as *;
 
 .user-settings {
+    @include body-1;
+    margin-top: 1rem;
     margin-bottom: 1rem;
+
+    &__user {
+        @include body-2;
+    }
     
     &__settings-list {
         display: flex;
@@ -14,7 +21,7 @@
         padding: 0.25rem 0.5rem;
         &:hover {
             cursor:pointer;
-            background: $purple-lighter;
+            background: $green;
         }
     }
 }
