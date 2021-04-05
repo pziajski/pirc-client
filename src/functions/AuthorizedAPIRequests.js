@@ -8,7 +8,9 @@ const HTTP = axios.create({
 export const authGetRequest = (endpoint) => {
     return HTTP.get(`${process.env.REACT_APP_API}/${endpoint}`)
         .then(response => {
-            return decryptData(response.data.data);
+            const decryptData = decryptData(response.data.data);
+            console.log(decryptData)
+            return decryptData;
         });
 };
 
@@ -17,6 +19,8 @@ export const authPostRequest = (endpoint, data) => {
         data: encryptData(data)
     })
         .then(response => {
-            return decryptData(response.data.data);
+            const decryptData = decryptData(response.data.data);
+            console.log(decryptData)
+            return decryptData;;
         });
 };
