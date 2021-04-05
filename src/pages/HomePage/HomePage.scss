@@ -1,6 +1,7 @@
 @use "../../partials/color-scheme.scss" as *;
 
 .home-page {
+    position: relative;
     display: flex;
     height: 100vh;
 }
