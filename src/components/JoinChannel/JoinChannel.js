@@ -10,7 +10,7 @@ export const JoinChannel = (props) => {
             .then(channels => {
                 setAvailChannels(channels.filter(channel => !userChannelsJoined.find(joined => joined.channel_id === channel.id)));
             })
-    }, [])
+    }, [userChannelsJoined])
 
     const submitHandler = (e) => {
         e.preventDefault();
