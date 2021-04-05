@@ -24,6 +24,6 @@
 
     &__message {
         @include body-1;
-        word-wrap: break-word;
+        word-wrap: anywhere;
     }
 }
