@@ -19,6 +19,6 @@ export const authPostRequest = (endpoint, data) => {
     })
         .then(response => {
             const decryptedData = decryptData(response.data.data);
-            return decryptedData;;
+            return decryptedData;
         });
 };
