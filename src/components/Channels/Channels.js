@@ -14,9 +14,9 @@ export const Channels = (props) => {
             <h2 className="channels__title">{"// Channels"}</h2>
             <ul className="channels__list">
                 {
-                    userChannelsJoined.map(channel => 
+                    userChannelsJoined.map(channel =>
                         <li className="channels__list-item" key={channel.id}>
-                            <NavLink to={`/channels/${channel.channel_id}`} className="channels__channel" onClick={() => addToSession(channel.channel_id)}>{`< ${channel.channel.name} />`}</NavLink>
+                            <NavLink to={`/channels/${channel.channel.id}`} className="channels__channel" onClick={() => addToSession(channel.channel.id)}>{`< ${channel.channel.name} />`}</NavLink>
                         </li>
                     )
                 }
