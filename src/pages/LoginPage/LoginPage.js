@@ -58,7 +58,7 @@ export const LoginPage = (props) => {
             : setAction("login");
         setError("");
     }
-
+    
     if (!!cookies.get("authToken")) {
         return <Redirect to="/channels" />
     }
