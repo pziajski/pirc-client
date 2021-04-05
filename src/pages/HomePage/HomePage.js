@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Switch, Route } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { Chat } from "../../components/Chat/Chat";
@@ -11,6 +11,11 @@ import "./HomePage.scss";
 
 export const HomePage = (props) => {
     const cookies = new Cookies();
+
+    const pushToHistory = useCallback((url) => {
+        props.history.push(url);
+    }, [props.history])
+
     const [lastChannel, setLastChannel] = useState(!sessionStorage.getItem("lastChannel") ? 1 : parseInt(sessionStorage.getItem("lastChannel")));
     const [userInfo, setUserInfo] = useState({});
     useEffect(() => {
@@ -22,13 +27,13 @@ export const HomePage = (props) => {
                 }
             })
             .catch(error => {
-                props.history.push("/login");
+                pushToHistory("/login");
             })
 
         return () => {
             isMounted = false;
         }
-    }, []);
+    }, [pushToHistory]);
 
     const [userChannelsJoined, setUserChannelsJoined] = useState([]);
     useEffect(() => {
@@ -39,7 +44,7 @@ export const HomePage = (props) => {
                     if (isMounted) {
                         setUserChannelsJoined(channelsJoined);
                         !!channelsJoined.find(channel => channel.channel_id === lastChannel)
-                            ? props.history.push(`/channels/${lastChannel}`)
+                            ? pushToHistory(`/channels/${lastChannel}`)
                             : setLastChannel(1);
                     }
                 })
@@ -52,7 +57,7 @@ export const HomePage = (props) => {
             isMounted = false;
         }
 
-    }, [userInfo, lastChannel]);
+    }, [userInfo, lastChannel, pushToHistory]);
 
     const redirectToLogin = () => {
         cookies.remove("authToken", { path: "/" });
