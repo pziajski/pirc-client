@@ -29,9 +29,9 @@ export const Chat = (props) => {
         }
     }, [viewChannel]);
 
-
-    // get channel messages
-    const getChannelMessages = (isMounted) => {
+    const [channelMessages, setChannelMessages] = useState([]);
+    useEffect(() => {
+        let isMounted = true;
         authGetRequest(`chats/${channelId}`)
             .then(messages => {
                 if (isMounted) {
@@ -41,14 +41,16 @@ export const Chat = (props) => {
             .catch(error => {
                 console.error(error);
             })
-    }
-
-    const [channelMessages, setChannelMessages] = useState([]);
-    useEffect(() => {
-        let isMounted = true;
-        getChannelMessages(isMounted);
         const getMessagesOnInterval = setInterval(() => {
-            getChannelMessages(isMounted);
+            authGetRequest(`chats/${channelId}`)
+                .then(messages => {
+                    if (isMounted) {
+                        setChannelMessages(messages.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                })
         }, 2000);
 
         return () => {
