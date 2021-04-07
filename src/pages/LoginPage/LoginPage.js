@@ -75,7 +75,7 @@ export const LoginPage = (props) => {
                         <h1 className="login-page__title">PiRC</h1>
                     </div>
                     <form className="login-page__form" onSubmit={action === "login" ? loginUser : createUser}>
-                        <input className="login-page__input" type="text" name="username" placeholder="Username" required />
+                        <input className="login-page__input" type="text" name="username" placeholder="Username" autoComplete="off" required />
                         <input className="login-page__input" type="password" name="password" placeholder="Password" required />
                         {
                             action === "signup"
