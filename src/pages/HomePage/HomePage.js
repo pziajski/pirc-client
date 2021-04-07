@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Switch, Route } from "react-router-dom";
-import Cookies from "universal-cookie";
 import { Chat } from "../../components/Chat/Chat";
 import { Channels } from "../../components/Channels/Channels";
 import { UserSettings } from "../../components/UserSettings/UserSettings";
@@ -10,8 +9,6 @@ import { JoinChannel } from "../../components/JoinChannel/JoinChannel";
 import "./HomePage.scss";
 
 export const HomePage = (props) => {
-    const cookies = new Cookies();
-
     const pushToHistory = useCallback((url) => {
         props.history.push(url);
     }, [props.history])
@@ -60,7 +57,7 @@ export const HomePage = (props) => {
     }, [userInfo, lastChannel, pushToHistory]);
 
     const redirectToLogin = () => {
-        cookies.remove("authToken", { path: "/" });
+        localStorage.removeItem("authToken");
         props.history.push("/login");
     }
 
