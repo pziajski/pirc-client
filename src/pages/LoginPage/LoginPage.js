@@ -41,7 +41,7 @@ export const LoginPage = (props) => {
             return;
         }
 
-        if (password.length < 3 || password.length > 16) {
+        if (username.length < 3 || username.length > 16) {
             setError("username must be between 3 and 16 characters.");
             return;
         }
