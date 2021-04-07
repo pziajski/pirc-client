@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Cookies from "universal-cookie";
 import "./LoginPage.scss";
 import { Redirect } from 'react-router';
 import { authPostRequest } from "../../functions/AuthorizedAPIRequests";
@@ -7,13 +6,6 @@ import loginImage from "../../assets/images/umberto-FewHpO4VC9Y-unsplash.jpg"
 import iconImage from "../../assets/images/Source-Code-256.png";
 
 export const LoginPage = (props) => {
-    const cookies = new Cookies();
-    const cookieConfig = {
-        path: "/",
-        maxAge: 604800000,
-        sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-        secure: process.env.NODE_ENV === "production"
-    };
     const [action, setAction] = useState("login");
     const [error, setError] = useState("");
 
@@ -24,7 +16,7 @@ export const LoginPage = (props) => {
 
         authPostRequest(`login`, { username, password })
             .then(response => {
-                cookies.set("authToken", response.token, cookieConfig)
+                localStorage.setItem("authToken", response.token);
                 props.history.push("/channels");
             })
             .catch(error => {
@@ -51,7 +43,7 @@ export const LoginPage = (props) => {
 
         authPostRequest(`signup`, { username, password })
             .then(response => {
-                cookies.set("authToken", response.token, cookieConfig)
+                localStorage.setItem("authToken", response.token);
                 props.history.push("/channels");
             })
             .catch(error => {
@@ -67,7 +59,7 @@ export const LoginPage = (props) => {
         setError("");
     }
 
-    if (!!cookies.get("authToken")) {
+    if (!!localStorage.getItem("authToken")) {
         return <Redirect to="/channels" />
     }
 
