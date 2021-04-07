@@ -41,6 +41,11 @@ export const LoginPage = (props) => {
             return;
         }
 
+        if (username.length < 3 || username.length > 16) {
+            setError("username must be between 3 and 16 characters.");
+            return;
+        }
+
         authPostRequest(`signup`, { username, password })
             .then(response => {
                 localStorage.setItem("authToken", response.token);
