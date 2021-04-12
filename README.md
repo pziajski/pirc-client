@@ -8,6 +8,6 @@ install all required packages using `npm i`
 
 creating a .env file that holds the following
 ```
-REACT_APP_API = url-of-server
-REACT_APP_HAS_KEY = same-encryption-key-from-server-env
+REACT_APP_API=url-of-server
+REACT_APP_HAS_KEY=same-encryption-key-from-server-env
 ```
