@@ -4,7 +4,7 @@ import { HomePage } from "./pages/HomePage/HomePage";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import "./App.scss";
 
-export const App = () => {
+export const App: React.FC = () => {
     return (
         <div className="app">
             <BrowserRouter>
