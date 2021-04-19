@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
+import { RouteComponentProps } from "react-router-dom";
 import "./LoginPage.scss";
 import { Redirect } from 'react-router';
 import { authPostRequest } from "../../functions/AuthorizedAPIRequests";
 import loginImage from "../../assets/images/umberto-FewHpO4VC9Y-unsplash.jpg"
 import iconImage from "../../assets/images/Source-Code-256.png";
 
-// TODO change props type
-export const LoginPage = (props: any) => {
+export const LoginPage: React.FC<RouteComponentProps> = (props) => {
     const [action, setAction] = useState("login");
     const [error, setError] = useState("");
 
