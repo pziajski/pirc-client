@@ -1,6 +1,6 @@
-export const convertDateToRelative = (timestamp) => {
+export const convertDateToRelative = (timestamp: Date) => {
     const now = new Date();
-    const timeDiff = now.getTime() - timestamp;
+    const timeDiff = now.getTime() - timestamp.getTime();
     const yearDiff = Math.floor(timeDiff/1000/60/60/24/30/12);
     const monthDiff = Math.floor(timeDiff/1000/60/60/24/30);
     const dayDiff = Math.floor(timeDiff/1000/60/60/24);
