@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, RouteComponentProps } from "react-router-dom";
 import { Chat } from "../../components/Chat/Chat";
 import { Channels } from "../../components/Channels/Channels";
 import { UserSettings } from "../../components/UserSettings/UserSettings";
@@ -7,27 +7,12 @@ import { authGetRequest, authPostRequest } from "../../functions/AuthorizedAPIRe
 import { CreateChannel } from "../../components/CreateChannel/CreateChannel";
 import { JoinChannel } from "../../components/JoinChannel/JoinChannel";
 import "./HomePage.scss";
+import iUserInfo from "../../interface/iUserInfo";
+import iChannelJoined from "../../interface/iChannelJoined";
+import iChannel from "../../interface/iChannel";
+import iUserChannelsJoined from "../../interface/iUserChannelsJoined";
 
-interface iUserInfo {
-    id: number,
-    username: String
-};
-
-interface iUserChannelsJoined extends Array<iChannelJoined> {};
-
-interface iChannelJoined {
-    id: number,
-    user_id: number,
-    channel_id: number
-};
-
-interface iChannel {
-    name: String,
-    id: number
-};
-
-//TODO change props type
-export const HomePage = (props: any) => {
+export const HomePage:React.FC<RouteComponentProps> = (props) => {
     const pushToHistory = useCallback((url) => {
         props.history.push(url);
     }, [props.history]);
@@ -43,7 +28,7 @@ export const HomePage = (props: any) => {
                     setUserInfo(userInfo);
                 }
             })
-            .catch(error => {
+            .catch(() => {
                 pushToHistory("/login");
             });
 
