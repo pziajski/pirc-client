@@ -1,4 +1,4 @@
 export default interface iChannel {
-    name: String,
+    name: string,
     id: number
 };

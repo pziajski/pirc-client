@@ -4,6 +4,6 @@ export default interface iChannelJoined {
     channel_id: number,
     channel: {
         id: number,
-        name: String
+        name: string
     }
 };
