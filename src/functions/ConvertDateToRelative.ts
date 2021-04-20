@@ -11,14 +11,14 @@ export const convertDateToRelative = (timestamp: Date) => {
     if (secDiff < 60) {
         return `a few seconds ago`;
     } else if (minDiff < 60) {
-        return `${minDiff} minutes ago`;
+        return `${minDiff} minute ago`;
     } else if (hourDiff < 24) {
-        return `${hourDiff} hours ago`;
+        return `${hourDiff} hour ago`;
     } else if (dayDiff < 30) {
-        return `${dayDiff} days ago`;
+        return `${dayDiff} day ago`;
     } else if (monthDiff < 12) {
-        return `${monthDiff} months ago`;
+        return `${monthDiff} month ago`;
     } else {
-        return `${yearDiff} years ago`;
+        return `${yearDiff} year ago`;
     }
 }
