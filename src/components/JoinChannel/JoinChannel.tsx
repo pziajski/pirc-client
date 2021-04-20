@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { authGetRequest } from '../../functions/AuthorizedAPIRequests';
+import iChannels from '../../interface/iChannels';
+import iJoinChannel from '../../interface/iJoinChannel';
 import "./JoinChannel.scss";
 
-export const JoinChannel = (props) => {
-    const { goBack, joinChannel, userChannelsJoined } = props;
-    const [availChannels, setAvailChannels] = useState([]);
+export const JoinChannel: React.FC<iJoinChannel> = ({ goBack, joinChannel, userChannelsJoined }) => {
+    const [availChannels, setAvailChannels] = useState<iChannels>([]);
     useEffect(() => {
         authGetRequest("channels")
-            .then(channels => {
+            .then((channels: iChannels) => {
                 setAvailChannels(channels.filter(channel => !userChannelsJoined.find(joined => joined.channel_id === channel.id)));
             })
     }, [userChannelsJoined])
 
-    const submitHandler = (e) => {
+    // TODO set event type
+    const submitHandler = (e: any) => {
         e.preventDefault();
         joinChannel(e.target.channel.value);
         goBack();
@@ -39,7 +41,7 @@ export const JoinChannel = (props) => {
                             ? <button className="join-channel__submit">Submit</button>
                             : <></>
                     }
-                    <button className="join-channel__cancel" type="click" onClick={goBack}>Cancel</button>
+                    <button className="join-channel__cancel" type="button" onClick={goBack}>Cancel</button>
                 </div>
             </form>
         </div>

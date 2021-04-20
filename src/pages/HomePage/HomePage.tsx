@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, RouteComponentProps } from "react-router-dom";
 import { Chat } from "../../components/Chat/Chat";
 import { Channels } from "../../components/Channels/Channels";
 import { UserSettings } from "../../components/UserSettings/UserSettings";
@@ -7,87 +7,92 @@ import { authGetRequest, authPostRequest } from "../../functions/AuthorizedAPIRe
 import { CreateChannel } from "../../components/CreateChannel/CreateChannel";
 import { JoinChannel } from "../../components/JoinChannel/JoinChannel";
 import "./HomePage.scss";
+import iUserInfo from "../../interface/iUserInfo";
+import iChannelJoined from "../../interface/iChannelJoined";
+import iChannel from "../../interface/iChannel";
+import iUserChannelsJoined from "../../interface/iUserChannelsJoined";
 
-export const HomePage = (props) => {
+export const HomePage:React.FC<RouteComponentProps> = (props) => {
     const pushToHistory = useCallback((url) => {
         props.history.push(url);
-    }, [props.history])
+    }, [props.history]);
 
-    const [lastChannel, setLastChannel] = useState(!sessionStorage.getItem("lastChannel") ? 1 : parseInt(sessionStorage.getItem("lastChannel")));
-    const [userInfo, setUserInfo] = useState({});
+    const [lastChannel, setLastChannel] = useState<number>(!sessionStorage.getItem("lastChannel") ? 1 : parseInt(sessionStorage.getItem("lastChannel") || ""));
+    
+    const [userInfo, setUserInfo] = useState<iUserInfo | {}>({});
     useEffect(() => {
         let isMounted = true;
         authGetRequest(`users/userInfo`)
-            .then(userInfo => {
+            .then((userInfo: iUserInfo) => {
                 if (isMounted) {
                     setUserInfo(userInfo);
                 }
             })
-            .catch(error => {
+            .catch(() => {
                 pushToHistory("/login");
-            })
+            });
 
         return () => {
             isMounted = false;
-        }
+        };
     }, [pushToHistory]);
 
-    const [userChannelsJoined, setUserChannelsJoined] = useState([]);
+    const [userChannelsJoined, setUserChannelsJoined] = useState<iUserChannelsJoined | []>([]);
     useEffect(() => {
         let isMounted = true;
         if (!!userInfo) {
             authGetRequest(`users/channels`)
-                .then(channelsJoined => {
+                .then((channelsJoined: iUserChannelsJoined) => {
                     if (isMounted) {
                         setUserChannelsJoined(channelsJoined);
                         !!channelsJoined.find(channel => channel.channel_id === lastChannel)
                             ? pushToHistory(`/channels/${lastChannel}`)
                             : setLastChannel(1);
-                    }
+                    };
                 })
                 .catch(error => {
                     console.error(error);
-                })
-        }
+                });
+        };
 
         return () => {
             isMounted = false;
-        }
+        };
 
     }, [userInfo, lastChannel, pushToHistory]);
 
     const redirectToLogin = () => {
         localStorage.removeItem("authToken");
         props.history.push("/login");
-    }
+    };
 
     const [createAction, setCreateAction] = useState(false);
-    const createChannel = (name) => {
+    const createChannel = (name: String) => {
         authPostRequest("channels", { name })
-            .then(newChannel => {
+            .then((newChannel: iChannel) => {
                 const { id } = newChannel;
                 setLastChannel(id);
-                sessionStorage.setItem("lastChannel", id);
+                sessionStorage.setItem("lastChannel", id.toString());
             })
             .catch(error => {
                 console.error(error);
             })
-    }
+    };
 
     const [joinAction, setJoinAction] = useState(false);
-    const joinChannel = (channelId) => {
-        authPostRequest(`channels/${channelId}/users`, { user_id: userInfo.id })
-            .then(joinedChannel => {
+    const joinChannel = (channelId: number) => {
+        authPostRequest(`channels/${channelId}/users`, { user_id: (userInfo as iUserInfo).id })
+            .then((joinedChannel: iChannelJoined) => {
                 setLastChannel(joinedChannel.channel_id);
             })
             .catch(error => {
                 console.error(error);
             })
-    }
+    };
 
     if (!userChannelsJoined && !userInfo) {
         return <>loading...</>
-    }
+    };
 
     return (
         <section className="home-page">
@@ -95,7 +100,7 @@ export const HomePage = (props) => {
                 <Channels
                     userChannelsJoined={userChannelsJoined} />
                 <UserSettings
-                    username={userInfo.username}
+                    username={(userInfo as iUserInfo).username}
                     redirectToLogin={redirectToLogin}
                     createChannel={() => setCreateAction(true)}
                     joinChannel={() => setJoinAction(true)}/>
@@ -104,7 +109,7 @@ export const HomePage = (props) => {
                 <Route path="/channels/:channelId" render={renderProps =>
                     <Chat
                         {...renderProps}
-                        userInfo={userInfo} />
+                        userInfo={userInfo as iUserInfo} />
                 } />
             </Switch>
             {
@@ -123,5 +128,5 @@ export const HomePage = (props) => {
                     : <></>
             }
         </section>
-    )
+    );
 }

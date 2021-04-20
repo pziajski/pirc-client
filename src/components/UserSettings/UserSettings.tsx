@@ -1,9 +1,8 @@
 import React from 'react';
+import iUserSettings from '../../interface/iUserSettings';
 import "./UserSettings.scss";
 
-export const UserSettings = (props) => {
-    const { username, redirectToLogin, createChannel, joinChannel } = props;
-
+export const UserSettings: React.FC<iUserSettings> = ({ username, redirectToLogin, createChannel, joinChannel }) => {
     return (
         <div className="user-settings">
             <p className="user-settings__user">{`// ${username}`}</p>

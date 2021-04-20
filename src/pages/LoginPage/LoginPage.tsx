@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { RouteComponentProps } from "react-router-dom";
 import "./LoginPage.scss";
 import { Redirect } from 'react-router';
 import { authPostRequest } from "../../functions/AuthorizedAPIRequests";
 import loginImage from "../../assets/images/umberto-FewHpO4VC9Y-unsplash.jpg"
 import iconImage from "../../assets/images/Source-Code-256.png";
 
-export const LoginPage = (props) => {
+export const LoginPage: React.FC<RouteComponentProps> = (props) => {
     const [action, setAction] = useState("login");
     const [error, setError] = useState("");
 
-    const loginUser = (e) => {
+    // TODO change event type
+    const loginUser = (e: any) => {
         e.preventDefault();
         const username = e.target.username.value;
         const password = e.target.password.value;
@@ -25,7 +27,8 @@ export const LoginPage = (props) => {
             })
     }
 
-    const createUser = (e) => {
+    // TODO change event type
+    const createUser = (e: any) => {
         e.preventDefault();
         const username = e.target.username.value;
         const password = e.target.password.value;

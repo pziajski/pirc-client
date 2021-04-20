@@ -1,7 +1,7 @@
 import axios from "axios";
 import { decryptData, encryptData } from "./encryption";
 
-export const authGetRequest = (endpoint) => {
+export const authGetRequest = (endpoint: String) => {
     return axios.get(`${process.env.REACT_APP_API}/${endpoint}`, {
         headers: {
             token: !!localStorage.getItem("authToken") ? localStorage.getItem("authToken") : ""
@@ -13,7 +13,7 @@ export const authGetRequest = (endpoint) => {
         });
 };
 
-export const authPostRequest = (endpoint, data) => {
+export const authPostRequest = (endpoint: String, data: {}) => {
     return axios.post(`${process.env.REACT_APP_API}/${endpoint}`, {
         data: encryptData(data)
     }, {

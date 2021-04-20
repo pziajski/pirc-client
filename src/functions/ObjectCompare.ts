@@ -1,8 +1,8 @@
-const isObject = (obj) => {
+const isObject = (obj: {}) => {
     return obj != null && typeof obj === 'object';
 }
 
-export const areObjectSame = (obj1, obj2) => {
+export const areObjectSame = (obj1: {}, obj2: {}) => {
     if (!isObject(obj1) || !isObject(obj2)) {
         return false;
     }
@@ -22,8 +22,8 @@ export const areObjectSame = (obj1, obj2) => {
     }
 
     for (let i = 0; i < keys1.length; i++) {
-        const areObjects = isObject(obj1[keys1[i]]) && isObject(obj2[keys1[i]]);
-        if ((areObjects && !areObjectSame(obj1[keys1[i]], obj2[keys1[i]])) || (!areObjects && obj1[keys1[i]] !== obj2[keys1[i]])) {
+        const areObjects = isObject(obj1[keys1[i] as keyof typeof obj1]) && isObject(obj2[keys1[i] as keyof typeof obj2]);
+        if ((areObjects && !areObjectSame(obj1[keys1[i] as keyof typeof obj1], obj2[keys1[i] as keyof typeof obj2])) || (!areObjects && obj1[keys1[i] as keyof typeof obj1] !== obj2[keys1[i] as keyof typeof obj2])) {
             return false;
         }
     }
