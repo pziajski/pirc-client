@@ -4,7 +4,7 @@ import "./Channels.scss";
 import iUserChannelsJoined from "../../interface/iUserChannelsJoined";
 import iChannelJoined from "../../interface/iChannelJoined";
 
-export const Channels: React.FC<{userChannelsJoined:iUserChannelsJoined}> = ({userChannelsJoined}) => {
+export const Channels: React.FC<{ userChannelsJoined:iUserChannelsJoined }> = ({ userChannelsJoined }) => {
 
     const addToSession = (channelID: number) => {
         sessionStorage.setItem("lastChannel", channelID.toString());
