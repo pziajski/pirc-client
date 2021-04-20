@@ -1,9 +1,9 @@
 import React from 'react';
 import { convertDateToRelative } from "../../functions/ConvertDateToRelative";
+import iChatMessage from '../../interface/iChatMessage';
 import "./ChatMessage.scss";
 
-export const ChatMessage = (props) => {
-    const { message, userInfo } = props;
+export const ChatMessage: React.FC<iChatMessage> = ({ message, userInfo }) => {
     return (
         <div className="chat-message">
             <div className="chat-message__header">
