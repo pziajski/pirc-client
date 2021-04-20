@@ -109,7 +109,7 @@ export const HomePage:React.FC<RouteComponentProps> = (props) => {
                 <Route path="/channels/:channelId" render={renderProps =>
                     <Chat
                         {...renderProps}
-                        userInfo={userInfo} />
+                        userInfo={userInfo as iUserInfo} />
                 } />
             </Switch>
             {
